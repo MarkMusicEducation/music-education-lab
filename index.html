@@ -1319,7 +1319,7 @@ async function loadPosts() {
   const newsList = document.getElementById('news-list');
   try {
     const response = await fetch(
-      'https://api.github.com/repos/MarkMusicEducation/music-education-lab/contents/_投稿',
+      'https://api.github.com/repos/MarkMusicEducation/music-education-lab/contents/_posts',
       { headers: { 'Accept': 'application/vnd.github.v3+json' } }
     );
     const files = await response.json();
