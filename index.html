@@ -1320,7 +1320,8 @@ footer {
       </a>
     </div>
     <div style="text-align:center; margin-top: 2.5rem;">
-      <a href="#" id="show-all-posts"　onclick="showAllPosts(); return false;"　class="btn-outline" style="display:inline-flex; color: var(--text-mid); border-color: var(--border); text-decoration:none;">
+      <a href="#" id="show-all-posts"　onclick="showAllPosts(); return false;"　class="btn-outline" style="display:inline-flex; color: var(--text-mid); bor
+        
         すべての記事を見る →
       </a>
     </div>
@@ -1486,6 +1487,48 @@ async function loadPosts() {
   }
 }
 
+    function showAllPosts() {
+  // 全記事一覧モーダルを表示
+  fetch('https://api.github.com/repos/MarkMusicEducation/music-education-lab/contents/_posts',
+    { headers: { 'Accept': 'application/vnd.github.v3+json' } }
+  )
+  .then(r => r.json())
+  .then(async files => {
+    if (!Array.isArray(files) || files.length === 0) return;
+    files.sort((a, b) => b.name.localeCompare(a.name));
+    const posts = await Promise.all(files.map(async file => {
+      const res = await fetch(file.download_url);
+      const text = await res.text();
+      const fmMatch = text.match(/^---\n([\s\S]*?)\n---/);
+      let title = file.name.replace(/\.md$/, '');
+      let date = '';
+      let category = '';
+      let body = text;
+      if (fmMatch) {
+        const fm = fmMatch[1];
+        const titleMatch = fm.match(/title:\s*(.+)/);
+        const dateMatch = fm.match(/date:\s*(.+)/);
+        const catMatch = fm.match(/category:\s*(.+)/);
+        if (titleMatch) title = titleMatch[1].trim().replace(/^["']|["']$/g, '');
+        if (dateMatch) {
+          const d = new Date(dateMatch[1].trim());
+          date = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日';
+        }
+        if (catMatch) category = catMatch[1].trim();
+        body = text.replace(/^---\n[\s\S]*?\n---\n/, '');
+      }
+      const excerpt = body.replace(/[#*\[\]]/g, '').trim().slice(0, 80) + '...';
+      return { title, date, category, excerpt, body };
+    }));
+
+    // 全記事一覧モーダル
+    let allModal = document.getElementById('all-posts-modal');
+    if (!allModal) {
+      allModal = document.createElement('div');
+      allModal.id = 'all-posts-modal';
+      allModal.style.cssText = 'display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,26,58,0.95); z-index:1001; overflow-y:auto; padding:2rem 1rem;';
+      allModal.innerHTML = `
+        <div style="max-width:760px; width:100%; margin
 loadPosts();
 </script>
 </section>
