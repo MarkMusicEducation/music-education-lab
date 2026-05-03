@@ -1288,9 +1288,6 @@ footer {
       
     </div>
   </div>
-</section>
-
-<!-- NEWS -->
 <section id="news">
   <div class="section-inner">
     <div class="section-header reveal">
@@ -1302,52 +1299,8 @@ footer {
       </p>
     </div>
     
-    <div class="news-list reveal">
-      
-      <a href="#" class="news-item">
-        <div class="news-meta">
-          <span class="news-date">2024年6月</span>
-          <span class="news-cat cat-research">海外研究紹介</span>
-        </div>
-        <div class="news-content">
-          <div class="news-title">アメリカの音楽教育における「クリエイティビティ」教育の最新動向</div>
-          <p class="news-excerpt">NAfME（全米音楽教育学会）が提唱するCreative Music Makingの理論と、教室での実践事例についてレポートします。</p>
-        </div>
-      </a>
-      
-      <a href="#" class="news-item">
-        <div class="news-meta">
-          <span class="news-date">2024年5月</span>
-          <span class="news-cat cat-report">活動報告</span>
-        </div>
-        <div class="news-content">
-          <div class="news-title">神奈川県内中学校にて音楽授業設計ワークショップを実施</div>
-          <p class="news-excerpt">「主体的・対話的で深い学び」を実現する音楽授業の組み立て方について、参加教員との対話形式で進行しました。</p>
-        </div>
-      </a>
-      
-      <a href="#" class="news-item">
-        <div class="news-meta">
-          <span class="news-date">2024年4月</span>
-          <span class="news-cat cat-seminar">セミナー案内</span>
-        </div>
-        <div class="news-content">
-          <div class="news-title">【開催予告】学校部活動の地域移行セミナー　合唱・音楽部に特化した移行戦略</div>
-          <p class="news-excerpt">教育委員会・学校管理職を主な対象とした地域移行支援セミナーを開催予定です。詳細は近日公開。</p>
-        </div>
-      </a>
-      
-      <a href="#" class="news-item">
-        <div class="news-meta">
-          <span class="news-date">2024年3月</span>
-          <span class="news-cat">コラム</span>
-        </div>
-        <div class="news-content">
-          <div class="news-title">なぜ日本の学校音楽教育に「国際的視点」が必要なのか</div>
-          <p class="news-excerpt">日本の音楽教育が世界の文脈でどう位置づけられるかを考察。グローバルスタンダードから学べることと、日本独自の強みを整理します。</p>
-        </div>
-      </a>
-      
+    <div id="news-list" class="news-list reveal">
+      <div style="text-align:center; padding:2rem; color:var(--text-muted);">記事を読み込み中...</div>
     </div>
     
     <div style="text-align:center; margin-top: 2.5rem;">
@@ -1358,7 +1311,79 @@ footer {
   </div>
 </section>
 
-<!-- CONTACT -->
+<script>
+// GitHub APIで_投稿フォルダの記事を取得
+async function loadPosts() {
+  const newsList = document.getElementById('news-list');
+  try {
+    const response = await fetch(
+      'https://api.github.com/repos/MarkMusicEducation/music-education-lab/contents/_投稿',
+      { headers: { 'Accept': 'application/vnd.github.v3+json' } }
+    );
+    const files = await response.json();
+    
+    if (!Array.isArray(files) || files.length === 0) {
+      newsList.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-muted);">記事はまだありません。</div>';
+      return;
+    }
+
+    // 新しい順に並び替え
+    files.sort((a, b) => b.name.localeCompare(a.name));
+
+    const posts = await Promise.all(files.slice(0, 5).map(async file => {
+      const res = await fetch(file.download_url);
+      const text = await res.text();
+      
+      // frontmatterを解析
+      const fmMatch = text.match(/^---\n([\s\S]*?)\n---/);
+      let title = file.name.replace(/\.md$/, '');
+      let date = '';
+      let category = '';
+      let body = text;
+      
+      if (fmMatch) {
+        const fm = fmMatch[1];
+        const titleMatch = fm.match(/title:\s*(.+)/);
+        const dateMatch = fm.match(/date:\s*(.+)/);
+        const catMatch = fm.match(/category:\s*(.+)/);
+        if (titleMatch) title = titleMatch[1].trim().replace(/^["']|["']$/g, '');
+        if (dateMatch) {
+          const d = new Date(dateMatch[1].trim());
+          date = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日';
+        }
+        if (catMatch) category = catMatch[1].trim();
+        body = text.replace(/^---\n[\s\S]*?\n---\n/, '');
+      }
+      
+      // 本文の最初の100文字を抜粋
+      const excerpt = body.replace(/[#*\[\]]/g, '').trim().slice(0, 100) + '...';
+      
+      return { title, date, category, excerpt };
+    }));
+
+    newsList.innerHTML = posts.map(post => `
+      <a href="#" class="news-item">
+        <div class="news-meta">
+          <span class="news-date">${post.date}</span>
+          <span class="news-cat">${post.category}</span>
+        </div>
+        <div class="news-content">
+          <div class="news-title">${post.title}</div>
+          <p class="news-excerpt">${post.excerpt}</p>
+        </div>
+      </a>
+    `).join('');
+    
+  } catch(e) {
+    newsList.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-muted);">記事の読み込みに失敗しました。</div>';
+  }
+}
+
+loadPosts();
+</script>
+</section>
+
+
 <section id="contact">
   <div class="section-inner">
     <div class="section-header reveal">
