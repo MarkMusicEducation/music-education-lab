@@ -1315,6 +1315,91 @@ footer {
 
 <script>
 // GitHub APIで_投稿フォルダの記事を取得
+// モーダル用スタイル
+const modalStyle = document.createElement('style');
+modalStyle.textContent = `
+#post-modal {
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(15,26,58,0.92);
+  z-index:1000;
+  overflow-y:auto;
+  padding:2rem 1rem;
+}
+#post-modal.open { display:flex; align-items:flex-start; justify-content:center; }
+#post-modal-inner {
+  background:var(--ivory);
+  max-width:760px;
+  width:100%;
+  border-radius:4px;
+  padding:3rem;
+  position:relative;
+  margin:2rem auto;
+}
+#post-modal-close {
+  position:absolute;
+  top:1rem;right:1.5rem;
+  font-size:1.8rem;
+  cursor:pointer;
+  color:var(--text-muted);
+  background:none;
+  border:none;
+  line-height:1;
+}
+#post-modal-close:hover { color:var(--text-dark); }
+#post-modal-title {
+  font-family:'Noto Serif JP',serif;
+  font-size:1.6rem;
+  font-weight:400;
+  color:var(--indigo-deep);
+  margin-bottom:0.5rem;
+  line-height:1.6;
+}
+#post-modal-meta {
+  font-size:12px;
+  color:var(--text-muted);
+  margin-bottom:2rem;
+  padding-bottom:1rem;
+  border-bottom:1px solid var(--border-light);
+}
+#post-modal-body {
+  font-size:15px;
+  line-height:2.1;
+  color:var(--text-mid);
+  font-weight:300;
+  white-space:pre-wrap;
+}
+`;
+document.head.appendChild(modalStyle);
+
+// モーダルHTML
+const modalEl = document.createElement('div');
+modalEl.id = 'post-modal';
+modalEl.innerHTML = `
+  <div id="post-modal-inner">
+    <button id="post-modal-close">×</button>
+    <h2 id="post-modal-title"></h2>
+    <div id="post-modal-meta"></div>
+    <div id="post-modal-body"></div>
+  </div>
+`;
+document.body.appendChild(modalEl);
+
+document.getElementById('post-modal-close').addEventListener('click', () => {
+  modalEl.classList.remove('open');
+});
+modalEl.addEventListener('click', (e) => {
+  if (e.target === modalEl) modalEl.classList.remove('open');
+});
+
+function openPost(title, date, category, body) {
+  document.getElementById('post-modal-title').textContent = title;
+  document.getElementById('post-modal-meta').textContent = date + '　' + category;
+  document.getElementById('post-modal-body').textContent = body;
+  modalEl.classList.add('open');
+}
+
 async function loadPosts() {
   const newsList = document.getElementById('news-list');
   try {
@@ -1329,14 +1414,12 @@ async function loadPosts() {
       return;
     }
 
-    // 新しい順に並び替え
     files.sort((a, b) => b.name.localeCompare(a.name));
 
     const posts = await Promise.all(files.slice(0, 5).map(async file => {
       const res = await fetch(file.download_url);
       const text = await res.text();
       
-      // frontmatterを解析
       const fmMatch = text.match(/^---\n([\s\S]*?)\n---/);
       let title = file.name.replace(/\.md$/, '');
       let date = '';
@@ -1357,14 +1440,13 @@ async function loadPosts() {
         body = text.replace(/^---\n[\s\S]*?\n---\n/, '');
       }
       
-      // 本文の最初の100文字を抜粋
       const excerpt = body.replace(/[#*\[\]]/g, '').trim().slice(0, 100) + '...';
       
-      return { title, date, category, excerpt };
+      return { title, date, category, excerpt, body };
     }));
 
-    newsList.innerHTML = posts.map(post => `
-      <a href="#" class="news-item">
+    newsList.innerHTML = posts.map((post, i) => `
+      <a href="#" class="news-item" data-index="${i}" onclick="return false;">
         <div class="news-meta">
           <span class="news-date">${post.date}</span>
           <span class="news-cat">${post.category}</span>
@@ -1375,6 +1457,15 @@ async function loadPosts() {
         </div>
       </a>
     `).join('');
+
+    // クリックイベント
+    const postData = posts;
+    newsList.querySelectorAll('.news-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const i = parseInt(el.dataset.index);
+        openPost(postData[i].title, postData[i].date, postData[i].category, postData[i].body);
+      });
+    });
     
   } catch(e) {
     newsList.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-muted);">記事の読み込みに失敗しました。</div>';
