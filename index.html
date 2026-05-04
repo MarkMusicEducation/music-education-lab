@@ -1640,6 +1640,14 @@ async function loadPosts() {
   }
 }
 
+// 訪問カウンター
+(function() {
+  const key = 'visit_count';
+  let count = parseInt(localStorage.getItem(key) || '0') + 1;
+  localStorage.setItem(key, count);
+  const el = document.getElementById('visit-counter');
+  if (el) el.textContent = count.toLocaleString();
+})();
 loadPosts();
 </script>
 </body>
