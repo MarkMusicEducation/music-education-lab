@@ -600,6 +600,7 @@ section { padding: 100px 0; }
   font-family: 'Noto Serif JP', serif;
   font-size: 2.2rem;
   font-weight: 300;
+  font-style: normal;
   color: var(--white);
   letter-spacing: 0.1em;
   margin-bottom: 0.25rem;
@@ -610,10 +611,19 @@ section { padding: 100px 0; }
   letter-spacing: 0.2em;
   margin-bottom: 0.5rem;
 }
+.profile-name-en {
+  font-family: 'EB Garamond', serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.4rem;
+}
+
 .profile-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  font-style: italic;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1rem;
+  font-style: normal;
   color: var(--gold-light);
   margin-bottom: 2.5rem;
   letter-spacing: 0.05em;
@@ -1067,7 +1077,7 @@ footer {
   .profile-left { max-width: 100%; }
   .profile-name-ja { font-size: 1.8rem; }
   .profile-bio { font-size: 13.5px; }
-  .profile-columns { grid-template-columns: 1fr; gap: 1.5rem; }
+  .profile-columns { grid-template-columns: 1fr !important; gap: 1.5rem; }
 
   /* ニュース */
   .news-item { padding: 1.25rem 1rem; }
@@ -1338,32 +1348,45 @@ footer {
         <div class="profile-section-eyebrow">Representative Profile</div>
         <h2 class="profile-name-ja">小川 昌文</h2>
         <div class="profile-name-reading">おがわ まさふみ</div>
-        <div class="profile-title">博士（音楽教育学）｜合唱指揮者</div>
+        <div class="profile-name-en">Masafumi Ogawa, D.M.E.</div>
+        <div class="profile-title">博士（音楽教育学）｜合唱指揮者<br>
+          <span style="font-family:'EB Garamond',serif; font-size:0.95rem; font-style:normal; color:rgba(212,173,92,0.8);">Doctor of Music Education | Choral Conductor</span>
+        </div>
         
         <p class="profile-bio">
-          音楽教育の<em>研究者・実践家・合唱指揮者</em>として活動。<em>インディアナ大学ジェイコブス音楽学部</em>にて音楽教育学の博士号を取得後、横浜国立大学にて音楽教育の研究・教育に長年携わる（2023年退職）。<br><br>
-          現在は白鷗大学・福井大学・都留文科大学の非常勤講師として教壇に立つ傍ら、合唱指揮者としても精力的に活動。2017〜18年にはベトナム政府の海外カリキュラムコンサルタントとして現地の学習指導要領作成に従事し、ハノイ教育大学の客員教授も務めた。<br><br>
-          「<em>音楽教育の研究と実践を現場でつなぐ</em>」という理念のもと、音楽教育ラボネットワークを設立し、学校・地域・社会へ向けた専門的支援を展開しています。
+          音楽教育の<em>研究者・実践家・合唱指揮者</em>として活動。<em>インディアナ大学ジェイコブス音楽学部</em>にて音楽教育学の博士号を取得後、横浜国立大学にて音楽教育の研究・教育に長年携わる（2023年退職）。現在は白鷗大学・福井大学・都留文科大学の非常勤講師として教壇に立つ傍ら、合唱指揮者としても精力的に活動。2017〜18年にはベトナム政府の海外カリキュラムコンサルタントとして現地の学習指導要領作成に従事し、ハノイ教育大学の客員教授も務めた。「<em>音楽教育の研究と実践を現場でつなぐ</em>」という理念のもと、音楽教育ラボネットワークを設立。
+        </p>
+        <p class="profile-bio" style="margin-top:-1.5rem;">
+          <em>A researcher, practitioner, and choral conductor in music education.</em> After earning his Doctor of Music Education (D.M.E.) from the <em>Indiana University Jacobs School of Music</em>, he served for many years at Yokohama National University (retired 2023). Currently an adjunct lecturer at Hakuoh University, University of Fukui, and Tsuru University, he remains active as a choral conductor. In 2017–18, he served as an overseas curriculum consultant for the Vietnamese government, contributing to national curriculum development, and as a visiting professor at Hanoi University of Education. He founded the Music Education Lab Network with the mission of <em>bridging research and practice in music education</em>.
         </p>
         
-        <div class="profile-columns">
+        <div class="profile-columns" style="grid-template-columns: 1fr 1fr 1fr;">
           <div class="profile-col">
-            <h4>学歴・職歴</h4>
+            <h4>学歴・職歴 / Career</h4>
             <ul class="profile-list">
-              <li>インディアナ大学 博士号（音楽教育学）</li>
-              <li>横浜国立大学（2023年退職）</li>
-              <li>ベトナム政府 カリキュラムコンサルタント（2017–18）</li>
-              <li>ハノイ教育大学 客員教授</li>
-              <li>白鷗大学・福井大学・都留文科大学 非常勤講師（現在）</li>
+              <li>インディアナ大学 博士号（音楽教育学）<br><span style="font-size:11px;opacity:0.7;">D.M.E., Indiana University Jacobs School of Music</span></li>
+              <li>横浜国立大学 名誉教授<br><span style="font-size:11px;opacity:0.7;">Professor Emeritus, Yokohama National University</span></li>
+              <li>ベトナム政府 カリキュラムコンサルタント（2017–18）<br><span style="font-size:11px;opacity:0.7;">Curriculum Consultant, Vietnamese Government (2017–18)</span></li>
+              <li>ハノイ教育大学 客員教授<br><span style="font-size:11px;opacity:0.7;">Visiting Professor, Hanoi University of Education</span></li>
+              <li>白鷗大学・福井大学・都留文科大学 非常勤講師（現在）<br><span style="font-size:11px;opacity:0.7;">Adjunct Lecturer, Hakuoh / Fukui / Tsuru Universities</span></li>
             </ul>
           </div>
           <div class="profile-col">
-            <h4>専門領域</h4>
+            <h4>専門領域 / Specializations</h4>
             <ul class="profile-list">
-              <li>音楽教育カリキュラム研究</li>
-              <li>合唱教育・合唱指揮</li>
-              <li>音楽教育の国際比較研究</li>
-              <li>音楽専門通訳（日英）</li>
+              <li>音楽教育カリキュラム研究<br><span style="font-size:11px;opacity:0.7;">Music Education Curriculum Research</span></li>
+              <li>合唱教育・合唱指揮<br><span style="font-size:11px;opacity:0.7;">Choral Education &amp; Conducting</span></li>
+              <li>音楽教育の国際比較研究<br><span style="font-size:11px;opacity:0.7;">International Comparative Music Education</span></li>
+              <li>音楽専門通訳（日英）<br><span style="font-size:11px;opacity:0.7;">Music Interpretation (Japanese–English)</span></li>
+            </ul>
+          </div>
+          <div class="profile-col">
+            <h4>所属学会・団体および役職<br><span style="font-size:10px; font-weight:300; opacity:0.7;">Affiliations &amp; Roles</span></h4>
+            <ul class="profile-list">
+              <li>日本音楽教育学会 元常任理事・編集委員<br><span style="font-size:11px;opacity:0.7;">Former Standing Director &amp; Editorial Board Member, JSMER</span></li>
+              <li>日本コダーイ協会 事務局長<br><span style="font-size:11px;opacity:0.7;">Secretary General, Japan Kodály Society</span></li>
+              <li>JCDA（日本合唱指揮者協会）会員<br><span style="font-size:11px;opacity:0.7;">Member, Japan Choral Conductors Association (JCDA)</span></li>
+              <li>KCCC（かながわ合唱指揮者クラブ）運営委員<br><span style="font-size:11px;opacity:0.7;">Board Member, Kanagawa Choral Conductors Club (KCCC)</span></li>
             </ul>
           </div>
         </div>
